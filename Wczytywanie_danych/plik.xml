@@ -1,0 +1,11 @@
+<ROOT>
+	<CHOICE>Krosno</CHOICE>
+
+	<CRITERION name="radość" m="1.0 1.0; 1.0 1.0">
+
+		<CRITERION name="szczęśliwość" m="1.0"/>
+
+		<CRITERION name="słoneczko" m="1.0"/>
+
+	</CRITERION>
+</ROOT>

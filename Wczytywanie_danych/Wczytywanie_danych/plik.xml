@@ -1,0 +1,15 @@
+<ROOT>
+	<CHOICE>Krosno</CHOICE>
+	<CHOICE>Kraków</CHOICE>
+	<CHOICE>Wrocław</CHOICE>
+
+	<CRITERION name="Szczęście" m="1.0 2.0 0.5; 0.5 1.0 0.5; 2.0 2.0 1.0">
+
+		<CRITERION name="Powietrze" m="1.0 5.0 5.0; 0.2 1.0 0.8; 0.2 1.25 1.0"/>
+
+		<CRITERION name="Widoki" m="1.0 5.0 2.0; 0.2 1.0 0.3; 0.5 3.3333333333333335 1.0"/>
+
+		<CRITERION name="Zarobki" m="1.0 0.2 0.2; 5.0 1.0 1.0; 5.0 1.0 1.0"/>
+
+	</CRITERION>
+</ROOT>
