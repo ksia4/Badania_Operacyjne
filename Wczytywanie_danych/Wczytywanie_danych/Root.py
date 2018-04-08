@@ -9,7 +9,7 @@ class Root:
         self.CriterionList = []
         self.opener = "<ROOT>\n"
         self.closer = "</ROOT>"
-        self.matrix = []
+        self.rank = []
 
     def read_data(self, name):
         self.path_to_file = name
@@ -44,6 +44,13 @@ class Root:
             text += subcrit.print()
         text += self.closer
         return text
+
+    def calc_rank_eig(self):
+        if len(self.MainSubcriterion) > 0:
+            self.rank = self.MainSubcriterion[0].calc_rank_eig()
+        else:
+            self.rank = self.CriterionList[0].calc_rank_eig()
+        print(self.rank)
 
 
 

@@ -1,4 +1,5 @@
 from Wczytywanie_danych import Subcriterion as sc
+import numpy.linalg as lin
 
 class Criterion:
 
@@ -8,6 +9,8 @@ class Criterion:
         self.opener = "\t<CRITERION "
         self.closer = "\t</CRITERION>\n"
         self.matrix = []
+        self.rank_eig = []
+        self.weights_vector_eig = []
 
     def add_subcriterion(self):
         subcriterium = input("Podaj nazwę podkryterium: " + self.name + " ")
@@ -118,4 +121,39 @@ class Criterion:
 
             self.add_subcriterion_from_file(main_subcrit)
 
+    def norm_vector(self, vect):
+        sum = 0
+        for el in vect:
+            sum += el
+        rank = [x / sum for x in vect]
+        return rank
+
+    def calc_weights_vector(self):
+        [val, vect] = lin.eig(self.matrix)
+        max_ind = 0
+        max_val = val[0]
+        for i in range(len(val)):
+            if val[i] > max_val:
+                max_val = val[i]
+                max_ind = i
+        rank_vect = vect[:, max_ind]
+        self.weights_vector_eig = self.norm_vector(rank_vect)
+        return self.rank_eig
+
+    def calc_rank_eig(self):
+        self.calc_weights_vector()
+        sub_rank_list = []
+        for ind, subcrit in enumerate(self.SubcriterionList):
+            subcrit_rank = subcrit.calc_rank_eig()
+            subcrit_rank = [x * self.weights_vector_eig[ind] for x in subcrit_rank]
+            sub_rank_list.append(subcrit_rank)
+
+        rank = []
+        for i in range(len(sub_rank_list[0])):
+            sum = 0
+            for el in sub_rank_list:
+                sum += el[i]
+            rank.append(sum.real)
+        self.rank_eig = rank
+        return self.rank_eig
 

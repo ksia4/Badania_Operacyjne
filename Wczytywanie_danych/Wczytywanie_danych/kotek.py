@@ -1,6 +1,11 @@
 from xml.dom import minidom
 
-xmldoc = minidom.parse('nowy_kod.xml')
-choices = xmldoc.getElementsByTagName('CHOICE')
-for i in range(len(choices)):
-    print(choices[i].firstChild.data)
+a = []
+b=[1,2,3]
+c=[2,3,4]
+
+a.append(b)
+a.append(c)
+print(a)
+diff = [b[i] - c[i] for i in range(len(b))]
+print(diff)

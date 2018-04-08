@@ -18,6 +18,7 @@ elif to_do == 1:
     read_root = r.Root()
     read_root.read_data(name)
     print(name)
+    read_root.calc_rank_eig()
 
 
 elif to_do == 2:
@@ -51,3 +52,4 @@ elif to_do == 2:
     plik = open(path, 'w')
     plik.write(root.print())
     plik.close()
+    root.calc_rank_eig()

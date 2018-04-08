@@ -1,3 +1,5 @@
+import numpy.linalg as lin
+
 class Subcriterion:
 
     def __init__(self, name):
@@ -6,6 +8,7 @@ class Subcriterion:
         self.opener = "\n\t\t<CRITERION "
         self.closer = "/>\n"
         self.matrix = []
+        self.rank_eig = []
 
     def set_matrix(self, matrix):
         self.matrix = matrix
@@ -51,3 +54,21 @@ class Subcriterion:
             self.set_matrix(matrix)
         return matrix
 
+    def norm_vector(self, vect):
+        sum = 0
+        for el in vect:
+            sum += el
+        rank = [x / sum for x in vect]
+        return rank
+
+    def calc_rank_eig(self):
+        [val, vect] = lin.eig(self.matrix)
+        max_ind = 0
+        max_val = val[0]
+        for i in range(len(val)):
+            if val[i] > max_val:
+                max_val = val[i]
+                max_ind = i
+        rank_vect = vect[:, max_ind]
+        self.rank_eig = self.norm_vector(rank_vect)
+        return self.rank_eig
