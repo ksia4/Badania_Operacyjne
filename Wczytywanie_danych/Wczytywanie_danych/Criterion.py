@@ -1,5 +1,6 @@
 from Wczytywanie_danych import Subcriterion as sc
 import numpy.linalg as lin
+import math
 
 class Criterion:
 
@@ -10,7 +11,9 @@ class Criterion:
         self.closer = "\t</CRITERION>\n"
         self.matrix = []
         self.rank_eig = []
+        self.rank_geo = []
         self.weights_vector_eig = []
+        self.weights_vector_geo = []
 
     def add_subcriterion(self):
         subcriterium = input("Podaj nazwę podkryterium: " + self.name + " ")
@@ -87,9 +90,15 @@ class Criterion:
         rows = string_matrix.split('; ')
         matrix = []
         for el_vect in rows:
+            strip_el = el_vect.strip()
+            print(strip_el)
+            if(len(strip_el) < 1):
+                continue
             temp_row = []
-            temp_el_vect = el_vect.split(' ')
+            # temp_el_vect = el_vect.split(' ')
+            temp_el_vect = strip_el.split(' ')
             for el in temp_el_vect:
+                print(el)
                 temp_row.append(float(el))
             matrix.append(temp_row)
         return matrix
@@ -128,20 +137,20 @@ class Criterion:
         rank = [x / sum for x in vect]
         return rank
 
-    def calc_weights_vector(self):
+    def calc_eig_weights_vector(self):
         [val, vect] = lin.eig(self.matrix)
         max_ind = 0
-        max_val = val[0]
+        max_val = val[0].real
         for i in range(len(val)):
-            if val[i] > max_val:
-                max_val = val[i]
+            if val[i].real > max_val:
+                max_val = val[i].real
                 max_ind = i
         rank_vect = vect[:, max_ind]
         self.weights_vector_eig = self.norm_vector(rank_vect)
-        return self.rank_eig
+        return self.weights_vector_eig
 
     def calc_rank_eig(self):
-        self.calc_weights_vector()
+        self.calc_eig_weights_vector()
         sub_rank_list = []
         for ind, subcrit in enumerate(self.SubcriterionList):
             subcrit_rank = subcrit.calc_rank_eig()
@@ -156,4 +165,31 @@ class Criterion:
             rank.append(sum.real)
         self.rank_eig = rank
         return self.rank_eig
+
+    def calc_geo_weights_vector(self):
+        for row in self.matrix:
+            mul = 1
+            for el in row:
+                mul*= el
+            val = math.pow(mul, 1.0/len(row))
+            self.weights_vector_geo.append(val)
+        self.weights_vector_geo = self.norm_vector(self.weights_vector_geo)
+        return self.weights_vector_geo
+
+    def calc_rank_geo(self):
+        self.calc_geo_weights_vector()
+        sub_rank_list = []
+        for ind, subcrit in enumerate(self.SubcriterionList):
+            subcrit_rank = subcrit.calc_rank_geo()
+            subcrit_rank = [x * self.weights_vector_geo[ind] for x in subcrit_rank]
+            sub_rank_list.append(subcrit_rank)
+
+        rank = []
+        for i in range(len(sub_rank_list[0])):
+            sum = 0
+            for el in sub_rank_list:
+                sum += el[i]
+            rank.append(sum.real)
+        self.rank_geo = rank
+        return self.rank_geo
 

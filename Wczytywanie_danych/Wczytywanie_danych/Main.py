@@ -6,7 +6,7 @@ from Wczytywanie_danych import Subcriterion as sc
 print("Witaj w programie pomagającym w podjęciu wielokryterialnej decyzji :)")
 print("Czy chcesz:\n0 - zakończyć działanie programu\n1 - wczytać dane z pliku\n2 - stworzyć nowy plik z danymi")
 to_do = int(input(" "))
-
+main_root = r.Root
 
 if to_do == 0:
     exit()
@@ -18,7 +18,7 @@ elif to_do == 1:
     read_root = r.Root()
     read_root.read_data(name)
     print(name)
-    read_root.calc_rank_eig()
+    main_root = read_root
 
 
 elif to_do == 2:
@@ -52,4 +52,15 @@ elif to_do == 2:
     plik = open(path, 'w')
     plik.write(root.print())
     plik.close()
-    root.calc_rank_eig()
+    main_root = root
+
+while True:
+    calculate = int(input("Czy chcesz obliczyć ranking ? \n1 - tak 0 - nie\n"))
+    if calculate:
+        method = int(input("Jaką metodą chcesz go obliczyć? \n0 - metoda wektrów własnych\n1 -Metoda średniej geometrycznej\n"))
+        if method == 0:
+            main_root.calc_rank_eig()
+        elif method == 1:
+            main_root.calc_rank_geo()
+    else:
+        break

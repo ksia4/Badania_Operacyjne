@@ -1,4 +1,5 @@
 import numpy.linalg as lin
+import math
 
 class Subcriterion:
 
@@ -9,6 +10,7 @@ class Subcriterion:
         self.closer = "/>\n"
         self.matrix = []
         self.rank_eig = []
+        self.rank_geo = []
 
     def set_matrix(self, matrix):
         self.matrix = matrix
@@ -72,3 +74,13 @@ class Subcriterion:
         rank_vect = vect[:, max_ind]
         self.rank_eig = self.norm_vector(rank_vect)
         return self.rank_eig
+
+    def calc_rank_geo(self):
+        for row in self.matrix:
+            mul = 1
+            for el in row:
+                mul*= el
+            val = math.pow(mul, 1.0/len(row))
+            self.rank_geo.append(val)
+        self.rank_geo = self.norm_vector(self.rank_geo)
+        return self.rank_geo

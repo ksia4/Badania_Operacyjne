@@ -52,6 +52,13 @@ class Root:
             self.rank = self.CriterionList[0].calc_rank_eig()
         print(self.rank)
 
+    def calc_rank_geo(self):
+        if len(self.MainSubcriterion) > 0:
+            self.rank = self.MainSubcriterion[0].calc_rank_geo()
+        else:
+            self.rank = self.CriterionList[0].calc_rank_geo()
+        print(self.rank)
+
 
 
 
