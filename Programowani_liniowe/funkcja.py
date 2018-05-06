@@ -1,4 +1,5 @@
 import math
+import Parser
 
 
 class Funkcja:
@@ -28,6 +29,10 @@ class Funkcja:
             next = input(' ')
             if next == 't':
                 break
+
+    def wczytaj_wspolczynniki_parserem(self):
+        data = input('Prosze wpisac rownanie')
+        max_ind = Parser.znajdz_maksymalny_indeks_x(data)
 
     def wczytaj_wyraz_wolny(self):
         print("Podaj wyraz wolny: ")
@@ -66,7 +71,7 @@ class Funkcja:
                 if ind == korygowany_indeks:
                     continue
                 wartosc -= punkt[ind] * self.tablica_wspolczynnikow[ind]
-            punkt[korygowany_indeks] = wartosc
+            punkt[korygowany_indeks] = wartosc/self.tablica_wspolczynnikow[korygowany_indeks]
 
         return punkt
 
