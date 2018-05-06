@@ -79,7 +79,7 @@ class Funkcja:
         wartosc = 0
         for wsplrz in range(len(punkt)):
             wartosc += punkt[wsplrz] * self.tablica_wspolczynnikow[wsplrz]
-        return wartosc
+        return wartosc + self.wyraz_wolny
 
     def znajdz_punkt_najblizej_celu(self, lista_punktow):
         wartosc_najmniejsza = self.znajdz_wartosc_funkcji_celu_w_punkcie(lista_punktow[0])

@@ -6,6 +6,18 @@
 # ------------------------------------------------------------
 import ply.lex as lex
 
+def znajdz_maksymalny_indeks_x(data):
+    max_ind = -1
+    lexer.input(data)
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break      # No more input
+        if tok.type == 'X' and tok.value > max_ind:
+            max_ind = tok.value
+    return max_ind
+
+
 # List of token names.   This is always required
 tokens = (
    'NUMBER',
@@ -43,7 +55,7 @@ t_LESS    = r'\<'
 
 def t_X(t):
     r'x\d+'
-    t.value = t.value[1:]
+    t.value = int(t.value[1:])
     return t
 
 def t_ZMIENNA(t):
@@ -54,7 +66,7 @@ def t_ZMIENNA(t):
 # A regular expression rule with some action code
 def t_NUMBER(t):
     r'\d+'
-    t.value = int(t.value)
+    t.value = float(t.value)
     return t
 
 # Define a rule so we can track line numbers

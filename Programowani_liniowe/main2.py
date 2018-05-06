@@ -2,7 +2,7 @@ import funkcja
 import zbior_funkcji
 import random
 import matplotlib.pyplot as plt
-import Parser
+import eksperymenty
 import ply.lex as lex
 
 if __name__ == '__main__':
@@ -20,50 +20,43 @@ if __name__ == '__main__':
             tryb = 0
         else:
             print("Proszę wpisać max lub min :)")
-    print(tryb)
     funkcja_celu = funkcja.Funkcja(max_or_min)
 
-    print("Proszę wprowadzić współczynniki funkcji celu, numeracja zmiennych od 1")
-    funkcja_celu.wczytaj_wspolczynniki()
-    # funkcja_celu.wczytaj_wspolczynniki_parserem()
+    data = input('Proszę podać funkcję celu (numeracja zmiennych od 1)\nf(X) = ')
+    f_celu_dane = eksperymenty.znajdz_wspolczynniki(data)
+    f_celu_wsp = f_celu_dane[0]
+    funkcja_celu.wyraz_wolny = f_celu_dane[1]
+    for wsp in f_celu_wsp:
+        funkcja_celu.dodal_wspolczynnik(wsp)
 
     print(funkcja_celu.tablica_wspolczynnikow)
     tablica_funkcji = zbior_funkcji.Zbior_funkcji()
     i = 1
     while True:
-        znak = input("Podaj znak funkcji f" + str(i))
-        i += 1
+        warunek = input('Proszę podać warunek:\n')
+        znak = eksperymenty.rozpoznaj_znak(warunek)
+        print(znak)
+        print("To był znak")
+        [rownanie, wyraz_wolny] = warunek.split(znak)
+        print(wyraz_wolny)
+        print("A współczynniki:")
+        wsp_warunku = eksperymenty.znajdz_wspolczynniki(rownanie)
         temp_funkcja = funkcja.Funkcja(znak)
-        temp_funkcja.wczytaj_wspolczynniki()
-        temp_funkcja.wczytaj_wyraz_wolny()
+        for wsp in wsp_warunku[0]:
+            temp_funkcja.dodal_wspolczynnik(wsp)
+        while len(funkcja_celu.tablica_wspolczynnikow) > len(temp_funkcja.tablica_wspolczynnikow):
+            temp_funkcja.dodal_wspolczynnik(float(0))
+        while len(funkcja_celu.tablica_wspolczynnikow) < len(temp_funkcja.tablica_wspolczynnikow):
+            funkcja_celu.dodal_wspolczynnik(float(0))
+        temp_funkcja.wyraz_wolny = float(wyraz_wolny)
         print("Dodano funkcję, jej znak to: " + temp_funkcja.znak)
         print("Jej współczynniki to ")
         print(temp_funkcja.tablica_wspolczynnikow)
         tablica_funkcji.dodaj_funkcje(temp_funkcja)
-        print("Czy to już ostatnia funkcja celu? [t/n]")
+        print("Czy chcesz dodać kolejną funkcję celu? [t/n]")
         next = input(' ')
-        if next == 't':
+        if next == 'n':
             break
-
-    # lista_indeksow_rownan = tablica_funkcji.zwraca_indeksy_rownan()
-    # najkrotsze_rownanie = funkcja_celu
-    # for ind in range(len(tablica_funkcji.tablica_funkcji)):
-    #     if tablica_funkcji.tablica_funkcji[ind].czy_funkcja_jest_rownaniem():
-    #         lista_indeksow_rownan.append(ind)
-
-    # tablica_punktow = []
-    # punkt1 = [100, 100]
-    # punkt2 = [0, 100]
-    # punkt3 = [3500, 0]
-    # punkt4 = [2500, 3500]
-    # punkt5 = [100, 4000]
-    # punkt6 = [1000, 4100]
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt1))
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt2))
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt3))
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt4))
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt5))
-    # print(tablica_funkcji.sprawdz_wszystkie_warunk(punkt6))
 
     tablica_punktow = []
     while len(tablica_punktow) < 100:
@@ -95,5 +88,3 @@ if __name__ == '__main__':
 
     for i in range(len(najlepszy_punkt)):
         print("Koordynat: " + str(najlepszy_punkt[i]))
-
-#dalej coś się troszke źle robi...
